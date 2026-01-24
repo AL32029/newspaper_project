@@ -133,7 +133,7 @@ petrov_author.update_rating()
 Author.objects.all().order_by("-rating").values("user__username", "rating").first()
 ```
 
-12. Вывод лучшей статьи, основываясь на лайках/дислайках к этой статье
+12. Вывод лучшей статьи, основываясь на лайках/дизлайках к этой статье
 ```python
 best_post = Post.objects.all().order_by("-rating").first()
 best_post_values = {
