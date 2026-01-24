@@ -1,21 +1,28 @@
-Команды для выполнения:
+### Команды для выполнения:
 
 1. Создание пользователей
+```python
 ivanov_user = User.objects.create_user('ivanov')
 petrov_user = User.objects.create_user('petrov')
 popov_user = User.objects.create_user('popov')
+```
 
 2. Создание авторов
+```python
 ivanov_author = Author.objects.create(user=ivanov_user)
 petrov_author = Author.objects.create(user=petrov_user)
+```
 
 3. Создание категорий
+```python
 category_sport = Category.objects.create(name='Спорт')
 category_music = Category.objects.create(name='Музыка')
 category_cars = Category.objects.create(name='Авто')
 category_technologies = Category.objects.create(name='Технологии')
+```
 
 4. Создание постов
+```python
 post_first = Post.objects.create(
     author=ivanov_author,
     post_type='AR',
@@ -34,8 +41,10 @@ post_third = Post.objects.create(
     title='Поп-звезда стала лицом нового электрокара на предстоящем автосалоне',
     text='Известная поп-певица Алисия Рэй сегодня официально была представлена в качестве амбассадора нового футуристического электрокара EON от компании «Volt Motors». Анонс состоялся в социальных сетях артистки и автопроизводителя.\nПо словам представителей бренда, креативная энергия и инновационный стиль певицы идеально сочетаются с философией их новой модели, которая должна быть представлена на международном автосалоне в следующем месяце. В рамках сотрудничества планируется выпуск специальной версии автомобиля и саундтрека, записанного специально для рекламной кампании. Это слияние мира музыки и передовых автомобильных технологий вызвало большой ажиотаж среди поклонников обоих брендов.'
 )
+```
 
 5. Добавление категорий к первому посту
+```python
 PostCategory.objects.create(
     category=category_cars,
     post=post_first
@@ -48,8 +57,10 @@ PostCategory.objects.create(
     category=category_sport,
     post=post_first
 )
+```
 
 6. Добавление категорий ко второму посту
+```python
 PostCategory.objects.create(
     category=category_music,
     post=post_second
@@ -58,8 +69,10 @@ PostCategory.objects.create(
     category=category_technologies,
     post=post_second
 )
+```
 
 7. Добавление категорий к третьему посту
+```python
 PostCategory.objects.create(
     category=category_music,
     post=post_third
@@ -68,8 +81,10 @@ PostCategory.objects.create(
     category=category_cars,
     post=post_third
 )
+```
 
 8. Создание комментариев
+```python
 comment_first = Comment.objects.create(
     post=post_first,
     user=popov_user,
@@ -93,8 +108,10 @@ comment_fourth = Comment.objects.create(
     user=popov_user,
     text='Главное, чтобы эти технологии из Формулы Е быстрее доходили до обычных машин. Обещали же, что супер-быстрая зарядка с трека через 5 лет будет в каждом доме. Жду не дождусь, когда поездки на дальние расстояния перестанут быть квестом на планирование.'
 )
+```
 
 9. Генерация лайков/дизлайков (для удобства используем цикл for):
+```python
 import random
 
 for object in [post_first, post_second, post_third, comment_first, comment_second, comment_third, comment_fourth]:
@@ -103,15 +120,21 @@ for object in [post_first, post_second, post_third, comment_first, comment_secon
             object.dislike()
         else:
             object.like()
+```
 
 10. Обновление рейтинга пользователей:
+```python
 ivanov_author.update_rating()
 petrov_author.update_rating()
+```
 
 11. Вывод лучшего пользователя:
+```python
 Author.objects.all().order_by("-rating").values("user__username", "rating").first()
+```
 
 12. Вывод лучшей статьи, основываясь на лайках/дислайках к этой статье
+```python
 best_post = Post.objects.all().order_by("-rating").first()
 best_post_values = {
     'created_at': best_post.created_at,
@@ -120,15 +143,14 @@ best_post_values = {
     'preview': best_post.preview()
 }
 print(best_post_values)
+```
 
 13. Вывод комментариев к лучшему посту
+```python
 Comment.objects.filter(post=best_post).values(
     'created_at',
     'user__username',
     'rating',
     'text'
 )
-
-
-
-
+```
