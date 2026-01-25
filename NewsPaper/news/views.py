@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView
 from django.shortcuts import render
 from django.utils import formats
 
-from .models import Post
+from .models import Post, PostCategory
 
 
 class NewsList(ListView):
@@ -23,4 +23,6 @@ class NewsInfo(DetailView):
         obj = self.get_object()
         context = super().get_context_data(**kwargs)
         context['text'] = obj.text.split("\n")
+        categories = PostCategory.objects.filter(post=obj)
+        context['category_names'] = ", ".join([category.category.name for category in categories])
         return context
