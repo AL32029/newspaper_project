@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -19,6 +20,9 @@ class Author(models.Model):
 
         self.rating = sum([posts_rating * 3, comments_rating, comments_posts_rating])
         self.save()
+
+    def __str__(self):
+        return self.user.username
 
 
 class Category(models.Model):
@@ -52,6 +56,9 @@ class Post(models.Model):
 
     def preview(self):
         return self.text[:124] + ("..." if len(self.text) > 124 else "")
+
+    def get_absolute_url(self):
+        return reverse('news_info' if self.post_type == 'NE' else 'articles_info', args=[str(self.id)])
 
 
 class PostCategory(models.Model):

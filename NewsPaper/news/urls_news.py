@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import NewsList, NewsInfo, NewsSearch
+from .views import NewsList, NewsInfo, NewsSearch, NewsCreate
 
 urlpatterns = [
     path('', NewsList.as_view()),
+    path('create/', NewsCreate.as_view()),
     path('search/', NewsSearch.as_view()),
-    path('<int:pk>', NewsInfo.as_view()),
+    path('<int:pk>', NewsInfo.as_view(), name="news_info"),
 ]

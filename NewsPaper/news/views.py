@@ -1,6 +1,8 @@
-from django.views.generic import ListView, DetailView
+from django.urls import reverse
+from django.views.generic import ListView, DetailView, CreateView
 
 from .filters import NewsFilter
+from .forms import NewsCreateForm, ArticlesCreateForm
 from .models import Post, PostCategory
 
 
@@ -64,6 +66,18 @@ class NewsInfo(DetailView):
         context['category_names'] = ", ".join([category.category.name for category in categories])
         return context
 
+
+class NewsCreate(CreateView):
+    form_class = NewsCreateForm
+    model = Post
+    template_name = 'news_create.html'
+
+    def form_valid(self, form):
+        news = form.save(commit=False)
+        news.post_type = "NE"
+        return super().form_valid(form)
+
+
 class ArticlesList(ListView):
     model = Post
     ordering = '-created_at'
@@ -123,3 +137,13 @@ class ArticlesInfo(DetailView):
         categories = PostCategory.objects.filter(post=obj)
         context['category_names'] = ", ".join([category.category.name for category in categories])
         return context
+
+class ArticlesCreate(CreateView):
+    form_class = ArticlesCreateForm
+    model = Post
+    template_name = 'articles_create.html'
+
+    def form_valid(self, form):
+        articles = form.save(commit=False)
+        articles.post_type = "AR"
+        return super().form_valid(form)
