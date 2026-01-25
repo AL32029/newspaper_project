@@ -1,8 +1,4 @@
-import datetime
-
 from django.views.generic import ListView, DetailView
-from django.shortcuts import render
-from django.utils import formats
 
 from .models import Post, PostCategory
 

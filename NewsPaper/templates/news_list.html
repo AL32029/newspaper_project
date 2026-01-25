@@ -13,7 +13,7 @@
     <h1 style="font-size: 20px; margin-top: 25px">Список новостей ({{ news|length }})</h1>
     <div style="margin: auto; width: 800px; text-align: left;">
         {% for news_item in news %}
-            <a href="{{ news_item.id }}" style="font-size: 14px">{{ news_item.created_at|date:'d.m.Y' }} - {{ news_item.title|truncatewords:20|censor }}</a><br>
+            <a href="{{ news_item.id }}" style="font-size: 14px">{{ news_item.created_at|date:'d.m.Y' }} - {{ news_item.title|truncatechars:20|censor }}</a><br>
         {% endfor %}
     </div>
 {% endblock content %}
