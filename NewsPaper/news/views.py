@@ -1,8 +1,8 @@
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .filters import NewsFilter
-from .forms import NewsCreateForm, ArticlesCreateForm
+from .forms import NewsForm, ArticlesForm
 from .models import Post, PostCategory
 
 
@@ -68,7 +68,7 @@ class NewsInfo(DetailView):
 
 
 class NewsCreate(CreateView):
-    form_class = NewsCreateForm
+    form_class = NewsForm
     model = Post
     template_name = 'news_create.html'
 
@@ -76,6 +76,30 @@ class NewsCreate(CreateView):
         news = form.save(commit=False)
         news.post_type = "NE"
         return super().form_valid(form)
+
+
+class NewsUpdate(UpdateView):
+    form_class = NewsForm
+    model = Post
+    template_name = 'news_update.html'
+
+    def get_context_data(self, **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['news_id'] = obj.id
+        return context
+
+
+class NewsDelete(DeleteView):
+    model = Post
+    template_name = 'news_delete.html'
+    success_url = reverse_lazy('news_list')
+
+    def get_context_data(self, **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['news_id'] = obj.id
+        return context
 
 
 class ArticlesList(ListView):
@@ -138,8 +162,9 @@ class ArticlesInfo(DetailView):
         context['category_names'] = ", ".join([category.category.name for category in categories])
         return context
 
+
 class ArticlesCreate(CreateView):
-    form_class = ArticlesCreateForm
+    form_class = ArticlesForm
     model = Post
     template_name = 'articles_create.html'
 
@@ -147,3 +172,27 @@ class ArticlesCreate(CreateView):
         articles = form.save(commit=False)
         articles.post_type = "AR"
         return super().form_valid(form)
+
+
+class ArticlesUpdate(UpdateView):
+    form_class = ArticlesForm
+    model = Post
+    template_name = 'articles_update.html'
+
+    def get_context_data(self, **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['articles_id'] = obj.id
+        return context
+
+
+class ArticlesDelete(DeleteView):
+    model = Post
+    template_name = 'articles_delete.html'
+    success_url = reverse_lazy('articles_list')
+
+    def get_context_data(self, **kwargs):
+        obj = self.get_object()
+        context = super().get_context_data(**kwargs)
+        context['articles_id'] = obj.id
+        return context

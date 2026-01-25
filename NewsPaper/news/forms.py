@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from .models import Post
 
 
-class NewsCreateForm(forms.ModelForm):
+class NewsForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'text', 'author']
@@ -23,7 +23,7 @@ class NewsCreateForm(forms.ModelForm):
             })
         return cleaned_data
 
-class ArticlesCreateForm(forms.ModelForm):
+class ArticlesForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'text', 'author']

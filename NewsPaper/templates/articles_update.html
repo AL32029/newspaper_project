@@ -8,14 +8,14 @@
 
 {% block content %}
     <div style="margin: 35px auto; width: 800px; text-align: left;">
-        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/articles"><< Назад</a></div>
+        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/articles/{{ articles_id }}"><< Назад</a></div>
         <div>
-            <h1 style="font-size: 16px">Создание статьи</h1>
+            <h1 style="font-size: 16px">Изменение статьи</h1>
             <div>
                 <form action="" method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input type="submit" value="Создать" />
+                    <input type="submit" value="Изменить" />
                 </form>
             </div>
         </div>

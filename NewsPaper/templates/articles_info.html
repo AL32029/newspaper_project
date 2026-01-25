@@ -8,7 +8,7 @@
 
 {% block content %}
     <div style="margin: 35px auto; width: 800px; text-align: left;">
-        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/articles"><< Назад</a></div>
+        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/articles"><< Назад</a> <a href="{{ articles.id }}/update">Изменить</a> <a href="{{ articles.id }}/delete">Удалить</a></div>
         <div>
             <h1 style="font-size: 16px">{{ articles.title|censor }}</h1>
             <p style="font-size: 13px; margin-bottom: 5px">{{ articles.created_at|date:'d.m.Y' }}</p>

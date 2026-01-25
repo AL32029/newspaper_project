@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+{{ object.title|censor|truncatechars:72 }}
+{% endblock title %}
+
+{% block content %}
+    <div style="margin: 35px auto; width: 800px; text-align: left;">
+        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/news/{{ news_id }}"><< Назад</a></div>
+        <div>
+            <h1 style="font-size: 16px">Удаление новости</h1>
+            <div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                     <h1 style="font-size: 14px">Удаляем новость "{{ object.title }}"?</h1>
+                    <input type="submit" value="Удалить" />
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
