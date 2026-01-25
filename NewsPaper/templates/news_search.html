@@ -9,13 +9,17 @@
 
 {% block content %}
     <h1 style="font-size: 20px; margin-top: 25px">Список новостей ({{ page_obj.paginator.count }})</h1>
+    <form action="" method="get">
+        <div style="display: flex; margin: auto; justify-content: space-around;">{{ filterset.form.as_p }}</div>
+        <input type="submit" value="Найти">
+    </form>
     <hr>
     <div style="margin: auto; width: 600px; text-align: left;">
-        <div style="font-size: 12px; margin-bottom: 20px;"><a href="search">Поиск</a> <a href="create">Создать</a></div>
+        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/news"><< Назад</a></div>
         <div>
             {% if news %}
                 {% for news_item in news %}
-                    <a href="{{ news_item.id }}" style="font-size: 15px;">{{ news_item.created_at|date:'d.m.Y' }} - {{ news_item.title|censor|truncatechars:72 }}</a><br>
+                    <a href="/news/{{ news_item.id }}" style="font-size: 15px;">{{ news_item.created_at|date:'d.m.Y' }} - {{ news_item.title|censor|truncatechars:72 }}</a><br>
                 {% endfor %}
             {% else %}
                 <h2 style="font-size: 18px; text-align: center;">Новости отсутствуют</h2>
