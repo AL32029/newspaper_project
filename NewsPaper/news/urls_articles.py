@@ -17,13 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import ArticlesList, ArticlesSearch, ArticlesInfo, ArticlesCreate, ArticlesUpdate, ArticlesDelete
+from .views import NewsList, NewsInfo, NewsSearch, NewsCreate, NewsDelete, NewsUpdate
 
 urlpatterns = [
-    path('', ArticlesList.as_view(), name="articles_list"),
-    path('create/', ArticlesCreate.as_view(), name="articles_create"),
-    path('search/', ArticlesSearch.as_view(), name="articles_search"),
-    path('<int:pk>', ArticlesInfo.as_view(), name="articles_info"),
-    path('<int:pk>/update/', ArticlesUpdate.as_view(), name='articles_update'),
-    path('<int:pk>/delete/', ArticlesDelete.as_view(), name='articles_delete'),
+    path('', NewsList.as_view(), {'post_type': 'articles'}, name="articles_list"),
+    path('create/', NewsCreate.as_view(), {'post_type': 'articles'}, name="articles_create"),
+    path('search/', NewsSearch.as_view(), {'post_type': 'articles'}, name="articles_search"),
+    path('<int:pk>', NewsInfo.as_view(), {'post_type': 'articles'}, name="articles_info"),
+    path('<int:pk>/update/', NewsUpdate.as_view(), {'post_type': 'articles'}, name='articles_update'),
+    path('<int:pk>/delete/', NewsDelete.as_view(), {'post_type': 'articles'}, name='articles_delete'),
 ]

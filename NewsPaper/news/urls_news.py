@@ -20,10 +20,10 @@ from django.urls import path
 from .views import NewsList, NewsInfo, NewsSearch, NewsCreate, NewsDelete, NewsUpdate
 
 urlpatterns = [
-    path('', NewsList.as_view(), name="news_list"),
-    path('create/', NewsCreate.as_view(), name="news_create"),
-    path('search/', NewsSearch.as_view(), name="news_search"),
-    path('<int:pk>', NewsInfo.as_view(), name="news_info"),
-    path('<int:pk>/update/', NewsUpdate.as_view(), name='news_update'),
-    path('<int:pk>/delete/', NewsDelete.as_view(), name='news_delete'),
+    path('', NewsList.as_view(), {'post_type': 'news'}, name="news_list"),
+    path('create/', NewsCreate.as_view(), {'post_type': 'news'}, name="news_create"),
+    path('search/', NewsSearch.as_view(), {'post_type': 'news'}, name="news_search"),
+    path('<int:pk>', NewsInfo.as_view(), {'post_type': 'news'}, name="news_info"),
+    path('<int:pk>/update/', NewsUpdate.as_view(), {'post_type': 'news'}, name='news_update'),
+    path('<int:pk>/delete/', NewsDelete.as_view(), {'post_type': 'news'}, name='news_delete'),
 ]
