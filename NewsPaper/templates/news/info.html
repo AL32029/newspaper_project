@@ -1,4 +1,6 @@
 {% extends 'flatpages/default.html' %}
+{% load humanize %}
+{% load tz %}
 
 {% load custom_filters %}
 
@@ -8,10 +10,14 @@
 
 {% block content %}
     <div style="margin: 35px auto; width: 800px; text-align: left;">
-        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/news"><< Назад</a> <a href="{{ news.id }}/update">Изменить</a> <a href="{{ news.id }}/delete">Удалить</a></div>
+        <div style="font-size: 12px; margin-bottom: 20px;"><a href="/news"><< Назад</a>
+        {% if is_author %}
+            <a href="{{ news.id }}/update">Изменить</a> <a href="{{ news.id }}/delete">Удалить</a>
+        {% endif %}
+        </div>
         <div>
             <h1 style="font-size: 16px">{{ news.title|censor }}</h1>
-            <p style="font-size: 13px; margin-bottom: 5px">{{ news.created_at|date:'d.m.Y' }}</p>
+            <p style="font-size: 13px; margin-bottom: 5px">{{ news.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} ({{ news.created_at|naturaltime }})</p>
             <p style="font-size: 11px; margin-bottom: 15px">{{ category_names }}</p>
             {% for text_block in text %}
                 <p style="font-size: 14px">{{ text_block|censor }}</p>

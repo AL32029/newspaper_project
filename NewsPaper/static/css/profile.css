@@ -1,0 +1,26 @@
+.profile-content {
+    width: 800px;
+    margin: auto;
+    margin-block: 0;
+    line-height: 1;
+}
+
+.profile-content-title {
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.profile-content-information {
+    margin-top: 15px;
+    text-align: left;
+}
+
+.profile-content-posts-title {
+    font-size: 15px;
+}
+
+.profile-content-posts-item {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+}

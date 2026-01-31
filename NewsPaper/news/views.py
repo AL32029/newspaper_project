@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import CreateView
@@ -88,6 +89,7 @@ class NewsInfo(DetailView):
         context['text'] = obj.text.split("\n")
         categories = PostCategory.objects.filter(post=obj)
         context['category_names'] = ", ".join([category.category.name for category in categories])
+        context['is_author'] = self.object.author.user == self.request.user
         return context
 
 
@@ -119,10 +121,16 @@ class NewsUpdate(LoginRequiredMixin, UpdateView):
         self.post_type = kwargs.get("post_type")
         self.template_name = f'{self.post_type}/update.html'
 
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.author.user != self.request.user:
+            raise PermissionDenied("Данный пост не принадлежит вам")
+        return object
+
     def get_context_data(self, **kwargs):
-        obj = self.get_object()
         context = super().get_context_data(**kwargs)
-        context['news_id'] = obj.id
+        context['news_id'] = self.object.id
+        context['is_author'] = self.object.author.user == self.request.user
         return context
 
 
@@ -138,8 +146,15 @@ class NewsDelete(LoginRequiredMixin, DeleteView):
         self.template_name = f'{self.post_type}/delete.html'
         self.success_url = reverse_lazy(f'{self.post_type}_list')
 
+    def get_object(self, queryset=None):
+        object = super().get_object()
+        if object.author.user != self.request.user:
+            raise PermissionDenied("Данный пост не принадлежит вам")
+        return object
+
     def get_context_data(self, **kwargs):
         obj = self.get_object()
         context = super().get_context_data(**kwargs)
         context['news_id'] = obj.id
+        context['is_author'] = self.object.author.user == self.request.user
         return context

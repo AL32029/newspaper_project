@@ -1,0 +1,47 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load humanize %}
+{% load tz %}
+
+{% load static %}
+
+{% block title %}
+Профиль пользователя {{ user.username }}
+{% endblock title %}
+
+{% block custom_links %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock custom_links %}
+
+<!-- TODO: Сделать кнопку для создания поста -->
+{% block content %}
+<div class="profile-content">
+    <h1 class="profile-content-title">Профиль пользователя {{ user.username }}</h1>
+    <div class="profile-content-information">
+        <p><b>Дата регистрации:</b> {{ user.date_joined|localtime|format_date:"%d.%m.%Y %H:%M" }} ({{ user.date_joined|naturaltime }})</p>
+        {% if is_author %}
+            <p><b>Статус автора:</b> Имеется</p>
+        {% else %}
+            <p><b>Статус автора:</b> Не имеется (<a href="get_author_status">получить статус автора</a>)</p>
+        {% endif %}
+        {% if is_author %}
+            <div class="profile-content-posts">
+                <h2 class="profile-content-posts-title">Опубликованные посты:</h2>
+                <div class="profile-content-posts-list">
+                    {% if posts %}
+                        {% for post in posts %}
+                            {% if post.post_type == "NE" %}
+                                <a href="/news/{{ post.id }}" class="profile-content-posts-item">{{ post.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} - {{ post.title|censor|truncatechars:72 }}</a><br>
+                            {% else %}
+                                <a href="/articles/{{ post.id }}" class="profile-content-posts-item">{{ post.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} - {{ post.title|censor|truncatechars:72 }}</a><br>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <h3 class="profile-content-posts-item">Опубликованные посты отсутствуют</h3>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

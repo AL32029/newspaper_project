@@ -10824,3 +10824,13 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+
+.profile-button {
+  color: white;
+  text-decoration: none;
+  text-align: right;
+}
+
+.profile-button:visited {
+  color: white;
+}
