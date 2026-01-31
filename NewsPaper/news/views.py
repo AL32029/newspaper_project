@@ -1,10 +1,10 @@
-from typing import Any
-
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView
 
 from .filters import NewsFilter
-from .forms import NewsForm, ArticlesForm
+from .forms import NewsForm
 from .models import Post, PostCategory
 
 
@@ -91,7 +91,7 @@ class NewsInfo(DetailView):
         return context
 
 
-class NewsCreate(CreateView):
+class NewsCreate(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     model = Post
     post_type = None
@@ -108,7 +108,7 @@ class NewsCreate(CreateView):
         return super().form_valid(form)
 
 
-class NewsUpdate(UpdateView):
+class NewsUpdate(LoginRequiredMixin, UpdateView):
     form_class = NewsForm
     model = Post
     post_type = None
@@ -126,7 +126,7 @@ class NewsUpdate(UpdateView):
         return context
 
 
-class NewsDelete(DeleteView):
+class NewsDelete(LoginRequiredMixin, DeleteView):
     model = Post
     post_type = None
     template_name = None
