@@ -19,7 +19,7 @@ class NewsList(ListView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_list.html'
+        self.template_name = f'{self.post_type}/list.html'
         self.context_object_name = self.post_type.__str__()
 
     def get_queryset(self):
@@ -46,7 +46,7 @@ class NewsSearch(ListView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_search.html'
+        self.template_name = f'{self.post_type}/search.html'
         self.context_object_name = self.post_type.__str__()
 
     def get_queryset(self):
@@ -72,7 +72,7 @@ class NewsInfo(DetailView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_info.html'
+        self.template_name = f'{self.post_type}/info.html'
         self.context_object_name = self.post_type.__str__()
 
     def get_queryset(self):
@@ -100,7 +100,7 @@ class NewsCreate(LoginRequiredMixin, CreateView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_create.html'
+        self.template_name = f'{self.post_type}/create.html'
 
     def form_valid(self, form):
         news = form.save(commit=False)
@@ -117,7 +117,7 @@ class NewsUpdate(LoginRequiredMixin, UpdateView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_update.html'
+        self.template_name = f'{self.post_type}/update.html'
 
     def get_context_data(self, **kwargs):
         obj = self.get_object()
@@ -135,7 +135,7 @@ class NewsDelete(LoginRequiredMixin, DeleteView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.post_type = kwargs.get("post_type")
-        self.template_name = f'{self.post_type}_delete.html'
+        self.template_name = f'{self.post_type}/delete.html'
         self.success_url = reverse_lazy(f'{self.post_type}_list')
 
     def get_context_data(self, **kwargs):
