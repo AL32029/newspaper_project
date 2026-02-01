@@ -1,9 +1,28 @@
 {% extends 'flatpages/default.html' %}
+{% load tz %}
+{% load static %}
+{% load custom_filters %}
 
-{% block title %}
-Главная
-{% endblock title %}
+{% block title %}Главная{% endblock title %}
+
+{% block custom_links %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock custom_links %}
 
 {% block content %}
-
+<div class="main-block">
+    <h1 class="main-block-title">Добро пожаловать в новостное агентство «Django»</h1>
+    <div class="main-block-last-news">
+        <h2 class="main-block-last-news-title">Последние новости</h2>
+        <div class="main-block-last-news-items">
+            {% for post in posts %}
+                {% if post.post_type == "NE" %}
+                    <a href="/news/{{ post.id }}" class="profile-content-posts-item">{{ post.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} - {{ post.title|censor|truncatechars:72 }}</a><br>
+                {% else %}
+                    <a href="/articles/{{ post.id }}" class="profile-content-posts-item">{{ post.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} - {{ post.title|censor|truncatechars:72 }}</a><br>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock content %}
