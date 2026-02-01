@@ -52,7 +52,7 @@ LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 
 ACCOUNT_FORMS = {
-    'signup': 'accounts.forms.BasicSignupForm'
+    'signup': 'accounts.forms.CustomSignupForm'
 }
 
 MIDDLEWARE = [

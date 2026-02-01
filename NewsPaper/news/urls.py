@@ -14,16 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import re_path
 
 from .views import NewsList, NewsInfo, NewsSearch, NewsCreate, NewsDelete, NewsUpdate
 
 urlpatterns = [
-    path('', NewsList.as_view(), {'post_type': 'articles'}, name="articles_list"),
-    path('create/', NewsCreate.as_view(), {'post_type': 'articles'}, name="articles_create"),
-    path('search/', NewsSearch.as_view(), {'post_type': 'articles'}, name="articles_search"),
-    path('<int:pk>', NewsInfo.as_view(), {'post_type': 'articles'}, name="articles_info"),
-    path('<int:pk>/update/', NewsUpdate.as_view(), {'post_type': 'articles'}, name='articles_update'),
-    path('<int:pk>/delete/', NewsDelete.as_view(), {'post_type': 'articles'}, name='articles_delete'),
+    path('', NewsList.as_view(), name="articles_list"),
+    path('create/', NewsCreate.as_view(), name="articles_create"),
+    path('search/', NewsSearch.as_view(), name="articles_search"),
+    path('<int:pk>', NewsInfo.as_view(), name="articles_info"),
+    path('<int:pk>/update/', NewsUpdate.as_view(), name='articles_update'),
+    path('<int:pk>/delete/', NewsDelete.as_view(), name='articles_delete')
 ]
