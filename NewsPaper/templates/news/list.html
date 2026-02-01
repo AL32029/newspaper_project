@@ -1,11 +1,10 @@
 {% extends 'flatpages/default.html' %}
+{% load tz %}
 
 {% load custom_filters %}
 {% load custom_tags %}
 
-{% block title %}
-Список новостей | Новостное агентство «DJANGO»
-{% endblock title %}
+{% block title %}Список новостей{% endblock title %}
 
 {% block content %}
     <h1 style="font-size: 20px; margin-top: 25px">Список новостей ({{ page_obj.paginator.count }})</h1>
@@ -15,7 +14,7 @@
         <div>
             {% if news %}
                 {% for news_item in news %}
-                    <a href="{{ news_item.id }}" style="font-size: 15px;">{{ news_item.created_at|date:'d.m.Y' }} - {{ news_item.title|censor|truncatechars:72 }}</a><br>
+                    <a href="{{ news_item.id }}" style="font-size: 15px;">{{ news_item.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} - {{ news_item.title|censor|truncatechars:72 }}</a><br>
                 {% endfor %}
             {% else %}
                 <h2 style="font-size: 18px; text-align: center;">Новости отсутствуют</h2>

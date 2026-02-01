@@ -4,9 +4,7 @@
 
 {% load custom_filters %}
 
-{% block title %}
-{{ news.title|censor|truncatechars:72 }}
-{% endblock title %}
+{% block title %}{{ news.title|censor|truncatechars:72 }}{% endblock title %}
 
 {% block content %}
     <div style="margin: 35px auto; width: 800px; text-align: left;">

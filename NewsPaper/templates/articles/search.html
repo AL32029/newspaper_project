@@ -3,9 +3,7 @@
 {% load custom_filters %}
 {% load custom_tags %}
 
-{% block title %}
-Список статей | Новостное агентство «DJANGO»
-{% endblock title %}
+{% block title %}Поиск статей{% endblock title %}
 
 {% block content %}
     <h1 style="font-size: 20px; margin-top: 25px">Список статей ({{ page_obj.paginator.count }})</h1>

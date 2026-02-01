@@ -4,6 +4,10 @@ from django.shortcuts import render, redirect
 
 from news.models import Post, Author
 
+from allauth.account.views import SignupView
+
+from .forms import CustomSignupForm
+
 
 @login_required
 def profile_view(request):
@@ -25,6 +29,7 @@ def get_status_author(request):
         author_group.user_set.add(user)
     if not Author.objects.filter(user=user).exists():
         Author.objects.create(
-           user=user
+            user=user
         )
     return redirect("/accounts/profile/")
+
