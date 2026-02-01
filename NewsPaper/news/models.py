@@ -58,7 +58,9 @@ class Post(models.Model):
         return self.text[:124] + ("..." if len(self.text) > 124 else "")
 
     def get_absolute_url(self):
-        return reverse('news_info' if self.post_type == 'NE' else 'articles_info', args=[str(self.id)])
+        return reverse('post_info', args=[str(self.id)], kwargs={
+            "post_type": self.post_type
+        })
 
 
 class PostCategory(models.Model):

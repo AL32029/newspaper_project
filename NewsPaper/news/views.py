@@ -1,5 +1,8 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+import re
+
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.http.request import HttpRequest
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import CreateView
@@ -17,9 +20,9 @@ class NewsList(ListView):
     context_object_name = None
     paginate_by = 10
     
-    def setup(self, request, *args, **kwargs):
+    def setup(self, request: HttpRequest, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/list.html'
         self.context_object_name = self.post_type.__str__()
 
@@ -46,7 +49,7 @@ class NewsSearch(ListView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/search.html'
         self.context_object_name = self.post_type.__str__()
 
@@ -72,7 +75,7 @@ class NewsInfo(DetailView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/info.html'
         self.context_object_name = self.post_type.__str__()
 
@@ -93,7 +96,10 @@ class NewsInfo(DetailView):
         return context
 
 
-class NewsCreate(LoginRequiredMixin, CreateView):
+class NewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = (
+        'news.add_post'
+    )
     form_class = NewsForm
     model = Post
     post_type = None
@@ -101,7 +107,7 @@ class NewsCreate(LoginRequiredMixin, CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/create.html'
 
     def form_valid(self, form):
@@ -110,7 +116,10 @@ class NewsCreate(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class NewsUpdate(LoginRequiredMixin, UpdateView):
+class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = (
+        'news.change_post'
+    )
     form_class = NewsForm
     model = Post
     post_type = None
@@ -118,7 +127,7 @@ class NewsUpdate(LoginRequiredMixin, UpdateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/update.html'
 
     def get_object(self, queryset=None):
@@ -142,7 +151,7 @@ class NewsDelete(LoginRequiredMixin, DeleteView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = kwargs.get("post_type")
+        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/delete.html'
         self.success_url = reverse_lazy(f'{self.post_type}_list')
 
