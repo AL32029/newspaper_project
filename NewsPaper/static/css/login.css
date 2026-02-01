@@ -1,0 +1,121 @@
+.block-login {
+    width: 800px;
+    margin: auto;
+    padding: 10px 0;
+    display: inline-grid;
+}
+
+.block-login-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.error-block {
+    width: 75%;
+    padding: 15px;
+    color: #ba3939;
+    background: #ffe0e0;
+    border-radius: 25px;
+    border: 1px solid #a33a3a;
+    margin: 15px auto;
+}
+
+.error-block > p {
+    line-height: 1;
+    margin-block: 0;
+    font-weight: 500;
+    text-align: left;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.error-block > p:last-child {
+    margin-bottom: 0;
+}
+
+.form-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 250px;
+    margin: auto;
+}
+
+.form-login-input {
+    display: inline-grid;
+    justify-items: center;
+    margin-bottom: 10px;
+}
+
+.form-login-input:last-of-type {
+    margin-bottom: 0;
+}
+
+.form-login-input > label {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.form-login-input > input {
+    font-size: 12px;
+    text-align: center;
+    width: 200px;
+    height: 25px;
+    border-radius: 1000px;
+    border: 1px solid black;
+}
+
+.form-login-additional {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.form-login-additional-item {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+    gap: 5px;
+}
+
+.login-social-account {
+    margin-top: 10px;
+}
+
+.login-social-account-title {
+    margin-block: 0;
+    line-height: 1;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.login-social-account-items {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-social-account-item {
+
+    text-align: center;
+}
+
+.login-social-account-item > img {
+    width: 30px;
+    height: auto;
+    outline: 1px solid black;
+    border-radius: 50%;
+    outline-offset: -1px;
+}
+
+.form-login-button {
+    background: none;
+    border-radius: 1000px;
+    border: 1px solid black;
+    width: 125px;
+    height: 30px;
+    text-align: center;
+    margin-top: 20px;
+}

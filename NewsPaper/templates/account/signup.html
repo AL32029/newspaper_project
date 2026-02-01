@@ -1,0 +1,59 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+
+{% block title %}Регистрация{% endblock title %}
+
+{% block custom_links %}
+<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+{% endblock custom_links %}
+
+{% block content %}
+<div class="block-signup">
+    <h1 class="block-signup-title">Регистрация пользователя</h1>
+    {% if form.errors %}
+    <div class="error-block">
+        {% for fields in form %}
+            {% for error in fields.errors %}
+                <p>• {{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if form.non_field_errors %}
+    <div class="error-block">
+        {% for error in form.non_field_errors %}
+        <p>• {{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <form action="" method="post" class="form-signup">
+        {% csrf_token %}
+        {% if form.username %}
+            <div class='form-signup-input'>
+                <label>{{ form.username.label }}</label>
+                {{ form.username }}
+            </div>
+        {% endif %}
+        {% if form.email %}
+            <div class='form-signup-input'>
+                <label>{{ form.email.label }}</label>
+                {{ form.email }}
+            </div>
+        {% endif %}
+        <div class='form-signup-input'>
+            <label>{{ form.password1.label }}</label>
+            {{ form.password1 }}
+        </div>
+        <div class='form-signup-input'>
+            <label>{{ form.password2.label }}</label>
+            {{ form.password2 }}
+        </div>
+        <div class="form-signup-additional">
+            <div class="form-signup-additional-item">
+                <a href="/accounts/login/">Уже есть аккаунт?</a>
+            </div>
+        </div>
+        <button type="submit" class="form-signup-button">Регистрация</button>
+    </form>
+</div>
+{% endblock content %}

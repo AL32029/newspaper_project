@@ -1,0 +1,69 @@
+{% extends 'flatpages/default.html' %}
+{% load i18n allauth socialaccount %}
+
+{% load static %}
+
+{% block title %}Вход в аккаунт{% endblock title %}
+
+{% block custom_links %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock custom_links %}
+
+{% block content %}
+<div class="block-login">
+    <h1 class="block-login-title">Вход в аккаунт</h1>
+    {% if form.non_field_errors %}
+    <div class="error-block">
+        {% for error in form.non_field_errors %}
+        <p>• {{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <form action="" method="post" class="form-login">
+        {% csrf_token %}
+        <div class='form-login-input'>
+            <label>Логин или e-mail</label>
+            {{ form.login }}
+        </div>
+        <div class='form-login-input'>
+            <label>{{ form.password.label }}</label>
+            {{ form.password }}
+        </div>
+        <div class="form-login-additional">
+            <div class="form-login-additional-item">
+                <label>{{ form.remember.label }}</label>
+                {{ form.remember }}
+            </div>
+            <div class="form-login-additional-item">
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    {{ form.password.help_text }}
+                    <a href="/accounts/signup/">Регистрация</a>
+                </div>
+            </div>
+        </div>
+        {% if SOCIALACCOUNT_ENABLED %}
+            {% get_providers as socialaccount_providers %}
+            {% if socialaccount_providers %}
+                <div class="login-social-account">
+                    <h5 class="login-social-account-title">Или войти с помощью</h5>
+                    <div class="login-social-account-items">
+                        {% for provider in socialaccount_providers %}
+                        {% if provider.id == "openid" %}
+                        {% for brand in provider.get_brands %}
+                        {% provider_login_url provider openid=brand.openid_url process=process as href %}
+                        {% element provider name=brand.name provider_id=provider.id href=href %}{% endelement %}
+                        <a href="{{ href }}" class="login-social-account-item"><img src="{% static 'img/socialaccounts/' %}{{ brand.name }}.png" alt="{{ brand.name }}"></a>
+                        {% endfor %}
+                        {% endif %}
+                        {% provider_login_url provider process=process scope=scope auth_params=auth_params as href %}
+                        <a href="{{ href }}" class="login-social-account-item"><img src="{% static 'img/socialaccounts/' %}{{ provider.name }}.png" alt="{{ provider.name }}"></a>
+                        {% endfor %}
+                    </div>
+                    {% providers_media_js %}
+                </div>
+            {% endif %}
+        {% endif %}
+        <button type="submit" class="form-login-button">Войти</button>
+    </form>
+</div>
+{% endblock content %}
