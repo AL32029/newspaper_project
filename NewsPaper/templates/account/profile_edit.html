@@ -1,0 +1,45 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+{% block custom_links %}
+<link rel="stylesheet" href="{% static 'css/profile_edit.css' %}">
+{% endblock custom_links %}
+
+{% block title %}Редактирование профиля{% endblock title %}
+
+{% block content %}
+{% if form.errors %}
+<div class="block-edit-profile">
+    <h1 class="block-edit-profile-title">Редактирование пользователя</h1>
+    <div class="error-block">
+        {% for field in form %}
+        {% for error in field.errors %}
+        <p>• {{ error }}</p>
+        {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <form action="" method="post" class="form-edit-profile">
+        {% csrf_token %}
+        <div class='form-edit-profile-input'>
+            <label>{{ form.username.label }}</label>
+            {{ form.username }}
+        </div>
+        <div class='form-edit-profile-input'>
+            <label>{{ form.email.label }}</label>
+            {{ form.email }}
+        </div>
+        <div class="form-edit-profile-name">
+            <div class='form-edit-profile-input'>
+                <label>{{ form.first_name.label }}</label>
+                {{ form.first_name }}
+            </div>
+            <div class='form-edit-profile-input'>
+                <label>{{ form.last_name.label }}</label>
+                {{ form.last_name }}
+            </div>
+        </div>
+        <button type="submit" class="form-edit-profile-button">Сохранить</button>
+    </form>
+</div>
+{% endblock content %}
