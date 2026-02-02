@@ -17,6 +17,13 @@
 {% block content %}
 <div class="profile-content">
     <h1 class="profile-content-title">Профиль пользователя {{ user.username }}</h1>
+    <div class="profile-content-links">
+        <a href="settings/">Редактировать профиль</a>
+        {% if is_author %}
+        <a href="/news/create/">Создать новость</a>
+        <a href="/articles/create/">Создать статью</a>
+        {% endif %}
+    </div>
     <div class="profile-content-information">
         <p><b>Дата регистрации:</b> {{ user.date_joined|localtime|format_date:"%d.%m.%Y %H:%M" }} ({{ user.date_joined|naturaltime }})</p>
         {% if is_author %}
