@@ -16,7 +16,11 @@
 <!-- TODO: Сделать кнопку для создания поста -->
 {% block content %}
 <div class="profile-content">
+    {% if not user.first_name and not user.last_name %}
     <h1 class="profile-content-title">Профиль пользователя {{ user.username }}</h1>
+    {% else %}
+    <h1 class="profile-content-title">Профиль пользователя {{ user.first_name }} {{ user.last_name }}</h1>
+    {% endif %}
     <div class="profile-content-links">
         <a href="settings/">Редактировать профиль</a>
         {% if is_author %}
