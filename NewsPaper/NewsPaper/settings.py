@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 
 LOGIN_URL = "/accounts/login/"
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/accounts/profile/"
 
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.CustomSignupForm'
@@ -139,6 +139,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
