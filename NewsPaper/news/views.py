@@ -9,7 +9,8 @@ from django.views.generic.edit import CreateView
 
 from .filters import NewsFilter
 from .forms import NewsForm
-from .models import Post, PostCategory, UserCategory
+from .models import Post, PostCategory, UserCategory, Category, Author
+from .tasks import send_new_post_category
 
 
 class NewsList(ListView):
@@ -128,7 +129,16 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     def form_valid(self, form):
         news = form.save(commit=False)
         news.post_type = "NE" if self.post_type == "news" else "AR"
-        return super().form_valid(form)
+        news.author_id = Author.objects.filter(user_id=self.request.user).first().id
+        news.save()
+        if form.cleaned_data.get("category") is not None:
+            PostCategory.objects.create(category=Category.objects.filter(id=form.cleaned_data.get("category")).first(), post=news)
+        response = super().form_valid(form)
+        send_new_post_category(self.object.id)
+        return response
+
+    def get_success_url(self):
+        return f'/{self.post_type}/{self.object.id}'
 
 
 class NewsUpdate(PermissionRequiredMixin, UpdateView):
