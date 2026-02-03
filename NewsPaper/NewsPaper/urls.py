@@ -22,5 +22,6 @@ urlpatterns = [
     path('', include('main_app.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    re_path(r'(news|articles)/', include('news.urls'))
+    re_path(r'(news|articles)/', include('news.urls')),
+    re_path(r'(subscribe_category|unsubscribe_category)/', include('accounts.urls_categories'))
 ]

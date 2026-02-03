@@ -16,7 +16,7 @@
         <div>
             <h1 style="font-size: 16px">{{ news.title|censor }}</h1>
             <p style="font-size: 13px; margin-bottom: 5px">{{ news.created_at|localtime|format_date:"%d.%m.%Y %H:%M" }} ({{ news.created_at|naturaltime }})</p>
-            <p style="font-size: 11px; margin-bottom: 15px">{{ category_names }}</p>
+            <p style="font-size: 11px; margin-bottom: 15px">{{ category_names|safe }}</p>
             {% for text_block in text %}
                 <p style="font-size: 14px">{{ text_block|censor }}</p>
             {% endfor %}

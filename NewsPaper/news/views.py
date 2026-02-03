@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView
 
 from .filters import NewsFilter
 from .forms import NewsForm
-from .models import Post, PostCategory
+from .models import Post, PostCategory, UserCategory
 
 
 class NewsList(ListView):
@@ -90,8 +90,23 @@ class NewsInfo(DetailView):
         obj = self.get_object()
         context = super().get_context_data(**kwargs)
         context['text'] = obj.text.split("\n")
+
         categories = PostCategory.objects.filter(post=obj)
-        context['category_names'] = ", ".join([category.category.name for category in categories])
+        categories_subscribes = [
+            user_category.category
+            for user_category in UserCategory.objects.filter(
+                user=self.request.user,
+                category__in=[cat.category for cat in categories]
+            )
+        ]
+        categories_text = []
+        for category_item in categories:
+            is_subscribed = category_item.category in categories_subscribes
+            url = (f'<a href="/{"unsubscribe" if is_subscribed else "subscribe"}_category/{category_item.category.id}/?return_to={self.request.path}">'
+                   f'{"Отписаться" if is_subscribed else "Подписаться"}</a>')
+            categories_text.append(f"{category_item.category.name} ({url})")
+        context['category_names'] = ", ".join(categories_text)
+
         context['is_author'] = self.object.author.user == self.request.user
         return context
 

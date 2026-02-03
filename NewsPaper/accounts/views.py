@@ -1,12 +1,15 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
+from django.core.mail.message import EmailMultiAlternatives
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.template.loader import render_to_string
 from django.urls.base import reverse_lazy
 from django.views.generic import UpdateView
-from news.models import Post, Author
+from news.models import Post, Author, UserCategory, Category
 
 from .forms import ProfileEditForm
 
@@ -34,6 +37,23 @@ def get_status_author(request):
             user=user
         )
     return redirect("/accounts/profile/")
+
+
+@login_required
+def subscribe_category(request: HttpRequest, category_id: int):
+    user = request.user
+    action = re.findall(r'(subscribe|unsubscribe)', request.path)
+    if len(action) > 0:
+        action = action[0]
+        category_action = UserCategory.objects.filter(user=user, category__id=category_id)
+        if action == "subscribe":
+            if not category_action:
+                category_item = Category.objects.filter(id=category_id).first()
+                UserCategory.objects.create(user=user, category=category_item)
+        elif action == "unsubscribe":
+            if category_action:
+                category_action.delete()
+    return redirect(request.GET.get("return_to", "/"))
 
 
 class EditProfile(LoginRequiredMixin, UpdateView):
