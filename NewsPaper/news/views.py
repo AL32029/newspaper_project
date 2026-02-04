@@ -4,13 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.exceptions import PermissionDenied
 from django.http.request import HttpRequest
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from django.views.generic.edit import CreateView
 
 from .filters import NewsFilter
 from .forms import NewsForm
 from .models import Post, PostCategory, UserCategory, Category, Author
-from .tasks import send_new_post_category
 
 
 class NewsList(ListView):
@@ -126,16 +126,30 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/create.html'
 
+    def post(self, request, *args, **kwargs):
+        author = Author.objects.filter(user_id=self.request.user).first()
+        today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_posts_count = Post.objects.filter(
+            created_at__gte=today_start,
+            author=author
+        ).count()
+        print(today_start, today_posts_count)
+        if today_posts_count >= 3:
+            raise PermissionError("Вы не можете публиковать более 3 постов в сутки")
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
-        news = form.save(commit=False)
+        news: Post = form.save(commit=False)
         news.post_type = "NE" if self.post_type == "news" else "AR"
         news.author_id = Author.objects.filter(user_id=self.request.user).first().id
         news.save()
-        if form.cleaned_data.get("category") is not None:
-            PostCategory.objects.create(category=Category.objects.filter(id=form.cleaned_data.get("category")).first(), post=news)
-        response = super().form_valid(form)
-        send_new_post_category(self.object.id)
-        return response
+        category = form.cleaned_data.get("category")
+        if category:
+            PostCategory.objects.create(
+                category=Category.objects.filter(id=form.cleaned_data.get("category")).first(),
+                post=news
+            )
+        return super().form_valid(form)
 
     def get_success_url(self):
         return f'/{self.post_type}/{self.object.id}'
@@ -167,6 +181,9 @@ class NewsUpdate(PermissionRequiredMixin, UpdateView):
         context['is_author'] = self.object.author.user == self.request.user
         return context
 
+    def get_success_url(self):
+        return f'/{self.post_type}/{self.object.id}'
+
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
     model = Post
@@ -192,3 +209,6 @@ class NewsDelete(LoginRequiredMixin, DeleteView):
         context['news_id'] = obj.id
         context['is_author'] = self.object.author.user == self.request.user
         return context
+
+    def get_success_url(self):
+        return f'/{self.post_type}/'
