@@ -83,8 +83,7 @@ class Comment(models.Model):
         self.rating -= 1
         self.save()
 
-# TODO: На базе модели сделать еженедельную сводку о новых постах в любимой категории
+
 class UserCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-

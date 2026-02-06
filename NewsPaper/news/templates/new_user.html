@@ -1,0 +1,22 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поздравляем с успешной регистрацией</title>
+</head>
+<body>
+<h2>Привет, {{ user.username }}!</h2>
+<p>Поздравляем с успешной регистрацией в новостном агентстве «Django»!</p>
+{% if last_posts %}
+<p>Сейчас предлагаем вам посмотреть последние посты:</p>
+<ul>
+    {% for post in last_posts %}
+        <li><a href="{{ post|get_absolute_url_post }}">{{ post.title|censor|truncatechars:72 }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+</body>
+</html>
