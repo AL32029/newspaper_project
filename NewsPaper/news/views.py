@@ -133,8 +133,7 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
             created_at__gte=today_start,
             author=author
         ).count()
-        print(today_start, today_posts_count)
-        if today_posts_count >= 3:
+        if today_posts_count >= 3 and author.user.is_staff:
             raise PermissionError("Вы не можете публиковать более 3 постов в сутки")
         return super().post(request, *args, **kwargs)
 

@@ -1,0 +1,18 @@
+{% load custom_filters %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сводка новостей</title>
+</head>
+<body>
+<p>За прошедшую неделю в категории «{{ category.name }}» опубликовано {{ posts|length }} постов:</p>
+<ul>
+    {% for post in posts %}
+        <li><a href="{{ post|get_absolute_url_post }}">{{ post.title|censor|truncatechars:72 }}</a></li>
+    {% endfor %}
+</ul>
+</body>
+</html>

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.yandex',
     'allauth.socialaccount.providers.google',
     'django_filters',
+    'django_apscheduler',
     'news',
     'accounts',
     'main_app'
@@ -153,5 +154,8 @@ EMAIL_HOST_PASSWORD = '***'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = 'nikitabondarevvitebsk@yandex.by'
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
 
 SITE_ID = 1
