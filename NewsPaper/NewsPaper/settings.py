@@ -153,3 +153,5 @@ EMAIL_HOST_PASSWORD = '***'
 EMAIL_USE_SSL = True
 
 DEFAULT_FROM_EMAIL = 'nikitabondarevvitebsk@yandex.by'
+
+SITE_ID = 1

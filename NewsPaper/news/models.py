@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.db import models
-from django.urls import reverse
 
 
 class Author(models.Model):
@@ -59,9 +59,8 @@ class Post(models.Model):
         return self.text[:124] + ("..." if len(self.text) > 124 else "")
 
     def get_absolute_url(self):
-        return reverse('post_info', args=[str(self.id)], kwargs={
-            "post_type": self.post_type
-        })
+        domain = Site.objects.get_current().domain
+        return f'http://{domain}/{'news' if self.post_type == 'NE' else 'articles'}/{self.pk}'
 
 
 class PostCategory(models.Model):
