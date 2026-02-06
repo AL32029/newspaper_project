@@ -1,6 +1,6 @@
 import threading
 
-from django.core.mail import send_mail
+from django.conf import settings
 from django.core.mail.message import EmailMultiAlternatives
 from news.models import PostCategory, UserCategory
 
@@ -17,8 +17,8 @@ def send_new_post_category(post_id):
                 msg = EmailMultiAlternatives(
                     subject='Новый пост в вашей любимой категории',
                     body="В вашей любимой категории вышел новый пост",
-                    from_email='nikitabondarevvitebsk@yandex.by',
-                    bcc=[*users_to[200 * (users - 1):200 * users], "frizertvyt@gmail.com"]
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    bcc=[*users_to[200 * (users - 1):200 * users]]
                 )
                 msg.send()
         except Exception as e:
