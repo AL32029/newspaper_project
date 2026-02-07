@@ -93,19 +93,24 @@ class NewsInfo(DetailView):
         context['text'] = obj.text.split("\n")
 
         categories = PostCategory.objects.filter(post=obj)
-        categories_subscribes = [
-            user_category.category
-            for user_category in UserCategory.objects.filter(
-                user=self.request.user,
-                category__in=[cat.category for cat in categories]
-            )
-        ]
+        if self.request.user.is_authenticated:
+            categories_subscribes = [
+                user_category.category
+                for user_category in UserCategory.objects.filter(
+                    user=self.request.user,
+                    category__in=[cat.category for cat in categories]
+                )
+            ]
         categories_text = []
         for category_item in categories:
-            is_subscribed = category_item.category in categories_subscribes
-            url = (f'<a href="/{"unsubscribe" if is_subscribed else "subscribe"}_category/{category_item.category.id}/?return_to={self.request.path}">'
-                   f'{"Отписаться" if is_subscribed else "Подписаться"}</a>')
-            categories_text.append(f"{category_item.category.name} ({url})")
+            if self.request.user.is_authenticated:
+                is_subscribed = category_item.category in categories_subscribes
+                url = (
+                    f'<a href="/{"unsubscribe" if is_subscribed else "subscribe"}_category/{category_item.category.id}/?return_to={self.request.path}">'
+                    f'{"Отписаться" if is_subscribed else "Подписаться"}</a>')
+                categories_text.append(f"{category_item.category.name} ({url})")
+            else:
+                categories_text.append(f"{category_item.category.name}")
         context['category_names'] = ", ".join(categories_text)
 
         context['is_author'] = self.object.author.user == self.request.user
