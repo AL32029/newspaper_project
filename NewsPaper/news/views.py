@@ -3,6 +3,7 @@ import re
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http.request import HttpRequest
+from django.core.cache import cache
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
@@ -115,6 +116,13 @@ class NewsInfo(DetailView):
 
         context['is_author'] = self.object.author.user == self.request.user
         return context
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'post-{self.kwargs['pk']}')
+        if not obj:
+            obj = super().get_object(*args, **kwargs)
+            cache.set(f'post-{self.kwargs['pk']}', obj)
+        return obj
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):

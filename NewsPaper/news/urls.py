@@ -15,14 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.contrib import admin
 from django.urls import path
-from django.urls.conf import re_path
+from django.views.decorators.cache import cache_page
 
 from .views import NewsList, NewsInfo, NewsSearch, NewsCreate, NewsDelete, NewsUpdate
 
 urlpatterns = [
-    path('', NewsList.as_view(), name="articles_list"),
+    path('', cache_page(60*5)(NewsList.as_view()), name="articles_list"),
     path('create/', NewsCreate.as_view(), name="articles_create"),
     path('search/', NewsSearch.as_view(), name="articles_search"),
     path('<int:pk>', NewsInfo.as_view(), name="articles_info"),
