@@ -1,6 +1,6 @@
 {% extends 'flatpages/default.html' %}
 
-{% load custom_filters %}
+{% load news_filters %}
 
 {% block title %}{{ object.title|censor|truncatechars:72 }}{% endblock title %}
 
