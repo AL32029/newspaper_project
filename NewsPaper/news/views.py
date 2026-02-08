@@ -31,7 +31,7 @@ class NewsList(ListView):
             r'(news|articles)', request.path
         )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/list.html'
-        self.context_object_name = self.post_type.__str__
+        self.context_object_name = str(self.post_type)
 
     def get_queryset(self):
         queryset = super().get_queryset()

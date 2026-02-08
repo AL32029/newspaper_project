@@ -176,3 +176,12 @@ CELERY_RESULT_BACKEND = 'redis://192.168.0.126:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+FORBIDDEN_WORDS = [
+    "автосалоне",
+    "представлена",
+    "нового",
+    "бренд",
+    "технологии",
+    "слушают"
+]
