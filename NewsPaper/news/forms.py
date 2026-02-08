@@ -5,7 +5,12 @@ from .models import Post, Category
 
 
 class NewsForm(forms.ModelForm):
-    category = forms.ChoiceField(choices=((category.id, category.name) for category in Category.objects.all()))
+    """
+    Форма для постов
+    """
+    category = forms.ChoiceField(
+        choices=((category.id, category.name) for category in Category.objects.all())
+    )
     class Meta:
         model = Post
         fields = ['title', 'text']

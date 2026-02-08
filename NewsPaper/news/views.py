@@ -15,18 +15,23 @@ from .models import Post, PostCategory, UserCategory, Category, Author
 
 
 class NewsList(ListView):
+    """
+    Представление списка постов
+    """
     model = Post
     ordering = '-created_at'
     post_type = None
     template_name = None
     context_object_name = None
     paginate_by = 10
-    
+
     def setup(self, request: HttpRequest, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/list.html'
-        self.context_object_name = self.post_type.__str__()
+        self.context_object_name = self.post_type.__str__
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -42,18 +47,24 @@ class NewsList(ListView):
 
 
 class NewsSearch(ListView):
+    """
+    Представление поиска постов
+    """
     model = Post
     ordering = '-created_at'
     post_type = None
     template_name = None
     context_object_name = None
     paginate_by = 10
+    filterset = None
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/search.html'
-        self.context_object_name = self.post_type.__str__()
+        self.context_object_name = str(self.post_type)
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -70,6 +81,9 @@ class NewsSearch(ListView):
 
 
 class NewsInfo(DetailView):
+    """
+    Представление объекта поста
+    """
     model = Post
     post_type = None
     template_name = None
@@ -77,9 +91,11 @@ class NewsInfo(DetailView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/info.html'
-        self.context_object_name = self.post_type.__str__()
+        self.context_object_name = str(self.post_type)
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -107,7 +123,8 @@ class NewsInfo(DetailView):
             if self.request.user.is_authenticated:
                 is_subscribed = category_item.category in categories_subscribes
                 url = (
-                    f'<a href="/{"unsubscribe" if is_subscribed else "subscribe"}_category/{category_item.category.id}/?return_to={self.request.path}">'
+                    f'<a href="/{"unsubscribe" if is_subscribed else "subscribe"}_category/'
+                    f'{category_item.category.id}/?return_to={self.request.path}">'
                     f'{"Отписаться" if is_subscribed else "Подписаться"}</a>')
                 categories_text.append(f"{category_item.category.name} ({url})")
             else:
@@ -126,6 +143,9 @@ class NewsInfo(DetailView):
 
 
 class NewsCreate(PermissionRequiredMixin, CreateView):
+    """
+    Представление создания поста
+    """
     permission_required = (
         'news.add_post'
     )
@@ -136,7 +156,9 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/create.html'
 
     def post(self, request, *args, **kwargs):
@@ -168,6 +190,9 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
 
 
 class NewsUpdate(PermissionRequiredMixin, UpdateView):
+    """
+    Представление изменение поста
+    """
     permission_required = (
         'news.change_post'
     )
@@ -178,14 +203,16 @@ class NewsUpdate(PermissionRequiredMixin, UpdateView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/update.html'
 
     def get_object(self, queryset=None):
-        object = super().get_object()
-        if object.author.user != self.request.user:
+        obj = super().get_object()
+        if obj.author.user != self.request.user:
             raise PermissionDenied("Данный пост не принадлежит вам")
-        return object
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -198,6 +225,9 @@ class NewsUpdate(PermissionRequiredMixin, UpdateView):
 
 
 class NewsDelete(LoginRequiredMixin, DeleteView):
+    """
+    Представление удаления поста
+    """
     model = Post
     post_type = None
     template_name = None
@@ -205,15 +235,17 @@ class NewsDelete(LoginRequiredMixin, DeleteView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.post_type = re.findall(r'(news|articles)', request.path)[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
+        self.post_type = re.findall(
+            r'(news|articles)', request.path
+        )[0] if kwargs.get("post_type") is None else kwargs.get("post_type")
         self.template_name = f'{self.post_type}/delete.html'
         self.success_url = reverse_lazy(f'{self.post_type}_list')
 
     def get_object(self, queryset=None):
-        object = super().get_object()
-        if object.author.user != self.request.user:
+        obj = super().get_object()
+        if obj.author.user != self.request.user:
             raise PermissionDenied("Данный пост не принадлежит вам")
-        return object
+        return obj
 
     def get_context_data(self, **kwargs):
         obj = self.get_object()

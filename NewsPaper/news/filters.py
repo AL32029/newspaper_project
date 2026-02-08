@@ -6,9 +6,17 @@ from .models import Post
 
 
 class NewsFilter(FilterSet):
-    created_at = filters.DateFilter(method='filter_created_after_date', widget=forms.DateInput(attrs={'type': 'date'}))
+    """
+    Фильтр проверки даты из формы поиска постов
+    """
+    created_at = filters.DateFilter(
+        method='filter_created_after_date', widget=forms.DateInput(attrs={'type': 'date'})
+    )
 
     def filter_created_after_date(self, queryset, name, value):
+        """
+        Проверка условия даты
+        """
         if value:
             next_day = value + datetime.timedelta(days=1)
             return queryset.filter(created_at__gte=next_day)
